@@ -1,141 +1,109 @@
-📈 Stock Price Prediction using LSTM
 
-This project predicts the future stock prices using an LSTM (Long Short-Term Memory) deep learning model.
-It fetches historical stock data using yfinance, performs preprocessing such as moving averages and scaling, trains an LSTM model, evaluates it, and generates future predictions.
+# Stock-Market_LSTM
 
-🚀 Features
+A reproducible project for exploring stock price forecasting using a Long Short-Term Memory (LSTM) neural network. The repository contains a Jupyter notebook and a supporting Python script that demonstrate data collection, preprocessing, model training, evaluation and future price forecasting using historical stock data from Yahoo Finance (via yfinance).
 
-Fetches historical stock data (Open, Close, etc.) from Yahoo Finance
+## Highlights
+- Uses historical OHLC (open/high/low/close) data from Yahoo Finance
+- Time-series preprocessing: moving averages, scaling, and sequence windowing
+- LSTM-based model for sequence-to-value prediction
+- Evaluation with MAE, MSE and RMSE and visualization of predictions
+- Example notebook for step-by-step reproducibility (`UPD_STOCK.ipynb`)
 
-Computes Moving Averages (100, 200, 400 days)
+## Repository structure
 
-Splits data into Training and Testing sets (80–20 split)
+- `UPD_STOCK.ipynb` — Jupyter notebook with the full workflow (recommended for reproduction and analysis)
+- `upd_stock.py` — Script version / helper script (if present) for running the pipeline from the command line
+- `README.md` — This file
 
-Scales values using MinMaxScaler
+(Note: additional artifacts such as trained model files may be created in the project root after training.)
 
-Builds and trains a 4-layer LSTM model
+## Quick summary of the workflow
 
-Predicts prices for test data
+1. Download historical stock data using yfinance (ticker, start date, end date).
+2. Preprocess data: compute moving averages, drop missing rows, scale features using MinMaxScaler.
+3. Convert data to supervised sequences (e.g. 100-day input windows) for LSTM.
+4. Define and train a stacked LSTM model with dropout and a final Dense output.
+5. Make predictions on test data and rescale predicted values to original price range.
+6. Evaluate results (MAE, MSE, RMSE) and visualize actual vs predicted prices.
+7. Optionally save the trained model for later inference.
 
-Rescales predictions back to the original price
+## Requirements
 
-Calculates error metrics:
+Recommended Python version: 3.8 — 3.11
 
-MAE – Mean Absolute Error
+Install the core dependencies (example using PowerShell / Windows):
 
-MSE – Mean Squared Error
+```powershell
+python -m pip install --upgrade pip
+python -m pip install pandas numpy yfinance matplotlib scikit-learn tensorflow keras joblib jupyter
+```
 
-RMSE – Root Mean Squared Error
+Tip: consider creating a virtual environment before installing packages.
 
-Saves the trained model using joblib
+## How to run
 
-Predicts future prices based on previous 100 days
+Option A — Notebook (recommended):
 
-Visualizes data and predictions using Matplotlib
+1. Start Jupyter and open the notebook:
 
-📦 Requirements
-
-Install all dependencies:
-
-pip install pandas numpy yfinance matplotlib scikit-learn keras tensorflow joblib
-
-📁 Project Structure
-UPD_STOCK.ipynb      # Jupyter notebook containing full LSTM workflow
-stock_prediction.pkl # Saved trained LSTM model (generated after training)
-README.md            # Documentation
-
-🔍 Workflow Summary
-1. Data Collection
-
-Stock data is downloaded using:
-
-data = yf.download(stock, start, end)
-
-2. Preprocessing
-
-Reset index
-
-Compute 100, 200, and 400-day moving averages
-
-Drop null values
-
-Split into train/test sets
-
-Apply MinMaxScaler
-
-Create sequences of 100 previous days for LSTM input
-
-3. LSTM Model Architecture
-
-4 stacked LSTM layers
-
-Dropout (0.2) to prevent overfitting
-
-Dense layer for prediction
-
-Optimizer: Adam
-
-Loss: Mean Squared Error (MSE)
-
-4. Model Training
-model.fit(x, y, epochs=50, batch_size=32, verbose=1)
-
-5. Predictions & Rescaling
-
-Predicted values are rescaled back to original price:
-
-scale = 1 / scaler.scale_
-y_predict = y_predict * scale
-y = y * scale
-
-6. Visualization
-
-Plots actual vs predicted stock prices.
-
-📉 Evaluation Metrics
-
-The notebook calculates:
-
-MAE (Mean Absolute Error)
-
-MSE (Mean Squared Error)
-
-RMSE (Root Mean Squared Error)
-
-Example:
-
-print("MAE:", mean_absolute_error(y, y_pred))
-print("MSE:", mean_squared_error(y, y_pred))
-print("RMSE:", mean_squared_error(y, y_pred, squared=False))
-
-🔮 Future Prediction
-
-The last 100 days of data are used to generate future stock price predictions step-by-step.
-
-💾 Saving the Model
-joblib.dump(model, "stock_prediction.pkl")
-
-▶️ How to Run
-
-Open the notebook:
-
+```powershell
 jupyter notebook UPD_STOCK.ipynb
+```
 
+2. Run the cells in order. The notebook includes sections for data download, preprocessing, model definition/training, evaluation and future prediction.
 
-Run all cells step-by-step.
+Option B — Script (if `upd_stock.py` supports CLI):
 
-The model will be trained and saved.
+Run the script from PowerShell. If the script accepts command-line arguments, an example could be:
 
-Use the last section of the notebook to generate future predictions.
+```powershell
+python .\upd_stock.py --ticker AAPL --start 2015-01-01 --end 2024-12-31
+```
 
-📝 Notes
+If `upd_stock.py` does not accept arguments, open the file and update the parameters directly or run it as a module.
 
-LSTM requires sequence data, hence the 100-day window.
+## Typical configuration / hyperparameters
 
-Accuracy depends on the selected stock and time range.
+- Window (sequence length): 100 days (common default in the notebook)
+- Train/test split: 80/20 (configurable)
+- LSTM layers: stacked LSTM with Dropout (see notebook for exact architecture)
+- Loss: Mean Squared Error (MSE)
+- Optimizer: Adam
 
-This model predicts closing prices only.
+Adjust these values in the notebook or script to perform experiments.
 
-📜 License
+## Outputs
 
-This project is for educational and research use.
+- Trained model file (if saved) e.g. `stock_prediction.pkl` or TensorFlow/Keras checkpoint files
+- Prediction plots (matplotlib figures)
+- Numeric evaluation metrics printed to the notebook/session
+
+## Notes, assumptions & caveats
+
+- This project demonstrates a basic LSTM approach for educational purposes. Financial markets are noisy and this model is not production-grade trading software.
+- Predictions are for closing prices only (unless you change the target in the notebook).
+- Model performance heavily depends on the chosen ticker, timeframe, and hyperparameters.
+- The code uses Yahoo Finance via `yfinance`; availability and quality of data depend on that service.
+
+## Contributing
+
+Contributions are welcome. Good first steps:
+
+- Open an issue describing the feature or bug
+- Submit a pull request with a clear description and tests/examples when applicable
+
+Please include reproducible steps and any data or configuration used for experiments.
+
+## Acknowledgements
+
+- yfinance — for convenient access to historical stock data
+- scikit-learn, pandas, NumPy, matplotlib, TensorFlow / Keras for model and tooling
+
+## Contact
+
+For questions or collaboration, open an issue or contact the repository owner.
+
+## License
+
+No license file is included in this repository. The original README stated the project is intended for educational and research use. If you plan to reuse or redistribute this code, consider asking the repository owner to add a formal license (for example, MIT or Apache-2.0).
