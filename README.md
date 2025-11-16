@@ -1,109 +1,110 @@
 
 # Stock-Market_LSTM
 
-A reproducible project for exploring stock price forecasting using a Long Short-Term Memory (LSTM) neural network. The repository contains a Jupyter notebook and a supporting Python script that demonstrate data collection, preprocessing, model training, evaluation and future price forecasting using historical stock data from Yahoo Finance (via yfinance).
+Clean, reproducible example for forecasting stock closing prices using a Long Short-Term Memory (LSTM) neural network. This repository includes an interactive Jupyter notebook (`UPD_STOCK.ipynb`) with a step-by-step workflow and a companion script (`upd_stock.py`) for programmatic runs.
 
-## Highlights
-- Uses historical OHLC (open/high/low/close) data from Yahoo Finance
-- Time-series preprocessing: moving averages, scaling, and sequence windowing
-- LSTM-based model for sequence-to-value prediction
-- Evaluation with MAE, MSE and RMSE and visualization of predictions
-- Example notebook for step-by-step reproducibility (`UPD_STOCK.ipynb`)
+## Table of contents
 
-## Repository structure
+- About
+- Features
+- Repository layout
+- Quick start
+- Usage
+- Configuration & hyperparameters
+- Outputs & evaluation
+- Notes & caveats
+- Contributing
+- License
 
-- `UPD_STOCK.ipynb` — Jupyter notebook with the full workflow (recommended for reproduction and analysis)
-- `upd_stock.py` — Script version / helper script (if present) for running the pipeline from the command line
+## About
+
+This project demonstrates an end-to-end pipeline for time-series forecasting of stock prices using historical data from Yahoo Finance (via `yfinance`). It covers data collection, preprocessing (moving averages, scaling), sequence generation for LSTM input, model training, evaluation, and optional future forecasting.
+
+## Features
+
+- Download historic OHLC data using `yfinance` (Close is used by default)
+- Time-series preprocessing: moving averages, NaN handling, MinMax scaling
+- Convert tabular price data to supervised learning sequences (sliding windows)
+- Stacked LSTM model with Dropout and Dense output for regression
+- Evaluation with MAE, MSE, RMSE and visual plots of predicted vs actual prices
+- Notebook-first design for reproducibility and quick experimentation
+
+## Repository layout
+
+- `UPD_STOCK.ipynb` — Jupyter notebook (recommended) containing the full pipeline and visualizations
+- `upd_stock.py` — Script with helper functions and a programmatic entry point for training and prediction
 - `README.md` — This file
 
-(Note: additional artifacts such as trained model files may be created in the project root after training.)
+Note: training artifacts (models, plots) may be generated in the repository root when you run the notebook/script.
 
-## Quick summary of the workflow
+## Quick start
 
-1. Download historical stock data using yfinance (ticker, start date, end date).
-2. Preprocess data: compute moving averages, drop missing rows, scale features using MinMaxScaler.
-3. Convert data to supervised sequences (e.g. 100-day input windows) for LSTM.
-4. Define and train a stacked LSTM model with dropout and a final Dense output.
-5. Make predictions on test data and rescale predicted values to original price range.
-6. Evaluate results (MAE, MSE, RMSE) and visualize actual vs predicted prices.
-7. Optionally save the trained model for later inference.
+Prerequisites
+- Python 3.8 — 3.11 (recommended)
+- Recommended packages: pandas, numpy, matplotlib, scikit-learn, yfinance, tensorflow (or keras), joblib, jupyter
 
-## Requirements
-
-Recommended Python version: 3.8 — 3.11
-
-Install the core dependencies (example using PowerShell / Windows):
+Install (PowerShell):
 
 ```powershell
 python -m pip install --upgrade pip
-python -m pip install pandas numpy yfinance matplotlib scikit-learn tensorflow keras joblib jupyter
+python -m pip install pandas numpy matplotlib scikit-learn yfinance tensorflow joblib jupyter
 ```
 
-Tip: consider creating a virtual environment before installing packages.
+Tip: create and activate a virtual environment before installing dependencies.
 
-## How to run
+## Usage
 
-Option A — Notebook (recommended):
-
-1. Start Jupyter and open the notebook:
+Notebook (recommended)
+1. Launch Jupyter and open the notebook:
 
 ```powershell
 jupyter notebook UPD_STOCK.ipynb
 ```
 
-2. Run the cells in order. The notebook includes sections for data download, preprocessing, model definition/training, evaluation and future prediction.
+2. Run cells in order. The notebook is organized into sections: data download, preprocessing, sequence creation, model definition/training, evaluation, and forecasting.
 
-Option B — Script (if `upd_stock.py` supports CLI):
+Script
+- `upd_stock.py` contains helpers that mirror the notebook steps. You can import and call functions like `predict_stock_price()` from other scripts, or modify `upd_stock.py` to accept command-line arguments for `--ticker`, `--start`, `--end`, and `--future-days`.
 
-Run the script from PowerShell. If the script accepts command-line arguments, an example could be:
+Example (pseudo-CLI usage — adapt if script has no argument parser):
 
 ```powershell
-python .\upd_stock.py --ticker AAPL --start 2015-01-01 --end 2024-12-31
+python .\upd_stock.py --ticker AAPL --start 2015-01-01 --end 2024-12-31 --future-days 30
 ```
 
-If `upd_stock.py` does not accept arguments, open the file and update the parameters directly or run it as a module.
+## Configuration & hyperparameters
 
-## Typical configuration / hyperparameters
-
-- Window (sequence length): 100 days (common default in the notebook)
-- Train/test split: 80/20 (configurable)
-- LSTM layers: stacked LSTM with Dropout (see notebook for exact architecture)
+- Window length (sequence size): commonly 100 days
+- Train/Test split: default 80/20
+- Model: stacked LSTM layers with Dropout, final Dense (regression)
 - Loss: Mean Squared Error (MSE)
 - Optimizer: Adam
+- Epochs, batch size and layer sizes are configurable in the notebook/script — start small and iterate.
 
-Adjust these values in the notebook or script to perform experiments.
+## Outputs & evaluation
 
-## Outputs
+- Trained model files (example: `stock_prediction.pkl` or Keras checkpoints)
+- Plots: actual vs predicted closing prices and training history
+- Evaluation metrics: MAE, MSE, RMSE (printed in notebook/script)
 
-- Trained model file (if saved) e.g. `stock_prediction.pkl` or TensorFlow/Keras checkpoint files
-- Prediction plots (matplotlib figures)
-- Numeric evaluation metrics printed to the notebook/session
+## Notes & caveats
 
-## Notes, assumptions & caveats
-
-- This project demonstrates a basic LSTM approach for educational purposes. Financial markets are noisy and this model is not production-grade trading software.
-- Predictions are for closing prices only (unless you change the target in the notebook).
-- Model performance heavily depends on the chosen ticker, timeframe, and hyperparameters.
-- The code uses Yahoo Finance via `yfinance`; availability and quality of data depend on that service.
+- Educational example: this project is intended for learning and experimentation, not production trading.
+- Financial time-series forecasting is noisy; evaluate results carefully and avoid overfitting.
+- Data quality and availability depend on Yahoo Finance and the `yfinance` package.
+- The notebook targets Close price forecasting by default — you can extend features/targets (volume, OHLC, technical indicators) as needed.
 
 ## Contributing
 
-Contributions are welcome. Good first steps:
-
-- Open an issue describing the feature or bug
-- Submit a pull request with a clear description and tests/examples when applicable
-
-Please include reproducible steps and any data or configuration used for experiments.
-
-## Acknowledgements
-
-- yfinance — for convenient access to historical stock data
-- scikit-learn, pandas, NumPy, matplotlib, TensorFlow / Keras for model and tooling
-
-## Contact
-
-For questions or collaboration, open an issue or contact the repository owner.
+- Report bugs or request features by opening an issue.
+- Preferred workflow: fork → branch → PR with a clear description and, when applicable, tests or notebook examples.
 
 ## License
 
-No license file is included in this repository. The original README stated the project is intended for educational and research use. If you plan to reuse or redistribute this code, consider asking the repository owner to add a formal license (for example, MIT or Apache-2.0).
+No license file is included in this repository. If you plan to share or redistribute this code, add an appropriate license (e.g., MIT, Apache‑2.0).
+
+## Contact
+
+For questions or collaboration, open an issue in this repository.
+
+
