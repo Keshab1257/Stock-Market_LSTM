@@ -14,7 +14,7 @@ Clean, reproducible example for forecasting stock closing prices using a Long Sh
 - Outputs & evaluation
 - Notes & caveats
 - Contributing
-- License
+
 
 ## About
 
@@ -27,7 +27,7 @@ This project demonstrates an end-to-end pipeline for time-series forecasting of 
 - Convert tabular price data to supervised learning sequences (sliding windows)
 - Stacked LSTM model with Dropout and Dense output for regression
 - Evaluation with MAE, MSE, RMSE and visual plots of predicted vs actual prices
-- Notebook-first design for reproducibility and quick experimentation
+- Notebook-first sshould be design for reproducibility and quick experimentation
 
 ## Repository layout
 
