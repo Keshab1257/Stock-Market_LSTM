@@ -37,6 +37,8 @@ This project demonstrates an end-to-end pipeline for time-series forecasting of 
 
 Note: training artifacts (models, plots) may be generated in the repository root when you run the notebook/script.
 
+--------------------
+
 ## Quick start
 
 Prerequisites
