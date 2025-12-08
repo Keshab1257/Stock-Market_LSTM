@@ -27,15 +27,15 @@ This project demonstrates an end-to-end pipeline for time-series forecasting of 
 - Convert tabular price data to supervised learning sequences (sliding windows)
 - Stacked LSTM model with Dropout and Dense output for regression
 - Evaluation with MAE, MSE, RMSE and visual plots of predicted vs actual prices
-- Notebook-first sshould be design for reproducibility and quick experimentation
+- Notebook-first should be designed for reproducibility and quick experimentation
 
 ## Repository layout
 
-- `UPD_STOCK.ipynb` — Jupyter notebook (recommended) containing the full pipeline and visualizations
+- `UPD_STOCK.ipynb` — Jupyter notebook (recommended) containing the full pipeline and visualisations
 - `upd_stock.py` — Script with helper functions and a programmatic entry point for training and prediction
 - `README.md` — This file
 
-Note: training artifacts (models, plots) may be generated in the repository root when you run the notebook/script.
+Note: training artefacts (models, plots) may be generated in the repository root when you run the notebook/script.
 
 --------------------
 
